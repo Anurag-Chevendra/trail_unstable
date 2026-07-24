@@ -1,0 +1,983 @@
+{
+  "package": "torlnk-rd",
+  "registry_version": "1.8.0",
+  "analyzed_at": "2026-07-24T06:31:41.484016+00:00",
+  "status": "ok",
+  "install_returncode": 0,
+  "install_timed_out": false,
+  "package_dir_found": true,
+  "overall_verdict": "REVIEW",
+  "verdict_by_phase": {
+    "install": "REVIEW",
+    "import": "INCONCLUSIVE"
+  },
+  "harness_status": null,
+  "import_phase_executed": null,
+  "no_js_entry": false,
+  "import_phase_reason": "harness_crashed: no STATUS emitted",
+  "bin_entries": [],
+  "analysis_complete": true,
+  "network": {
+    "attribution": "pid_subtree",
+    "package_connections": [
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "20.207.73.82",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "60",
+        "from_package": true
+      },
+      {
+        "ip": "185.199.108.133",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "60",
+        "from_package": true
+      }
+    ],
+    "all_public_connections": [
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "20",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "17",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "31",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "23",
+        "from_package": true
+      },
+      {
+        "ip": "20.207.73.82",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "60",
+        "from_package": true
+      },
+      {
+        "ip": "185.199.108.133",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "69",
+        "from_package": false
+      },
+      {
+        "ip": "185.199.111.133",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "69",
+        "from_package": false
+      },
+      {
+        "ip": "185.199.110.133",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "69",
+        "from_package": false
+      },
+      {
+        "ip": "185.199.109.133",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "69",
+        "from_package": false
+      },
+      {
+        "ip": "185.199.108.133",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "60",
+        "from_package": true
+      }
+    ],
+    "dns_lookups_all": [
+      "github.com",
+      "registry.npmjs.org",
+      "release-assets.githubusercontent.com"
+    ],
+    "dns_lookups_non_npm": [
+      "github.com",
+      "release-assets.githubusercontent.com"
+    ],
+    "npm_hostnames_seen": [
+      "registry.npmjs.org"
+    ],
+    "exfil_services_contacted": [],
+    "verdict": "review"
+  },
+  "canaries": {
+    "attribution": "pid_subtree",
+    "canary_tokens_leaked": [],
+    "canary_token_count": 0,
+    "sensitive_file_access": [
+      {
+        "path": "/test/.npmrc",
+        "found": false,
+        "error": "ENOENT",
+        "read_by": "npm",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npmrc",
+        "found": true,
+        "error": null,
+        "read_by": "npm",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npmrc",
+        "found": true,
+        "error": null,
+        "read_by": "package",
+        "benign_npm_read": false
+      }
+    ],
+    "accessed_by_package": [
+      "/root/.npmrc"
+    ],
+    "probed_but_absent": [],
+    "verdict": "review"
+  },
+  "filesystem": {
+    "attribution": "pid_subtree",
+    "package_files_read": [
+      ".",
+      "/etc/gai.conf",
+      "/etc/host.conf",
+      "/etc/hosts",
+      "/etc/ld.so.cache",
+      "/etc/localtime",
+      "/etc/nsswitch.conf",
+      "/etc/resolv.conf",
+      "/root/.gitconfig",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/bin.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/package.json",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/index.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/package.json",
+      "/root/.npm/_prebuilds/85e730-node-datachannel-v0.32.3-napi-v8-linux-x64.tar.gz",
+      "/root/.npmrc",
+      "/test/package.json",
+      "/usr/bin/ldd",
+      "/usr/local/bin/node"
+    ],
+    "package_files_written": [
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/.package-lock.json",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/LICENSE",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/README.md",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/bin.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/LICENSE",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/README.md",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/index.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/package.json",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/package-lock.json",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/package.json",
+      "/root/.npm/_prebuilds/85e730-node-datachannel-v0.32.3-napi-v8-linux-x64.tar.gz.60-62ee65f7c2486.tmp"
+    ],
+    "package_dirs_created": [
+      "/root/.npm/_npx",
+      "/root/.npm/_npx/0b83cd9ca5e1325c",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/.bin",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs",
+      "/root/.npm/_prebuilds"
+    ],
+    "tmp_snooped": [
+      "/root/.gitconfig",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/package.json",
+      "/root/.npm/_prebuilds/85e730-node-datachannel-v0.32.3-napi-v8-linux-x64.tar.gz",
+      "/root/.npmrc"
+    ],
+    "recon_dir_scan": false,
+    "recon_dirs_enumerated": [],
+    "downloaded_artifacts": [
+      {
+        "path": "/root/.npm/_prebuilds/85e730-node-datachannel-v0.32.3-napi-v8-linux-x64.tar.gz.60-62ee65f7c2486.tmp",
+        "pid": "67",
+        "likely_source": [
+          "github.com",
+          "release-assets.githubusercontent.com"
+        ],
+        "executed": false
+      }
+    ],
+    "executed_by_package": [
+      {
+        "bin": "/usr/local/bin/npx",
+        "pid": "23"
+      },
+      {
+        "made_executable": "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/bin.js",
+        "pid": "32"
+      },
+      {
+        "bin": "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/.bin/sh",
+        "pid": "35"
+      },
+      {
+        "bin": "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/.bin/only-allow",
+        "pid": "36"
+      },
+      {
+        "bin": "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/.bin/node",
+        "pid": "36"
+      },
+      {
+        "made_executable": "/test/node_modules/node-datachannel/build/Release/node_datachannel.node",
+        "pid": "70"
+      }
+    ],
+    "all_reads": [
+      ".",
+      "/etc/gai.conf",
+      "/etc/host.conf",
+      "/etc/hosts",
+      "/etc/ld.so.cache",
+      "/etc/localtime",
+      "/etc/nsswitch.conf",
+      "/etc/resolv.conf",
+      "/root/.gitconfig",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/bin.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/only-allow/package.json",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/index.js",
+      "/root/.npm/_npx/0b83cd9ca5e1325c/node_modules/which-pm-runs/package.json",
+      "/root/.npm/_prebuilds/85e730-node-datachannel-v0.32.3-napi-v8-linux-x64.tar.gz",
+      "/root/.npmrc",
+      "/test/package.json",
+      "/usr/bin/ldd",
+      "/usr/local/bin/node"
+    ],
+    "verdict": "review"
+  },
+  "import_phase": {
+    "verdict": "CLEAN",
+    "network": {
+      "attribution": "pid_subtree",
+      "package_connections": [],
+      "all_public_connections": [],
+      "dns_lookups_all": [],
+      "dns_lookups_non_npm": [],
+      "npm_hostnames_seen": [],
+      "exfil_services_contacted": [],
+      "verdict": "clean"
+    },
+    "canaries": {
+      "attribution": "pid_subtree",
+      "canary_tokens_leaked": [],
+      "canary_token_count": 0,
+      "sensitive_file_access": [],
+      "accessed_by_package": [],
+      "probed_but_absent": [],
+      "verdict": "clean"
+    },
+    "filesystem": {
+      "attribution": "pid_subtree",
+      "package_files_read": [
+        "/etc/ld.so.cache",
+        "/etc/nsswitch.conf",
+        "/etc/resolv.conf",
+        "/test/myfile.js",
+        "/test/package.json",
+        "/usr/local/bin/node"
+      ],
+      "package_files_written": [],
+      "package_dirs_created": [],
+      "tmp_snooped": [],
+      "recon_dir_scan": false,
+      "recon_dirs_enumerated": [],
+      "downloaded_artifacts": [],
+      "executed_by_package": [],
+      "all_reads": [
+        "/etc/ld.so.cache",
+        "/etc/nsswitch.conf",
+        "/etc/resolv.conf",
+        "/test/myfile.js",
+        "/test/package.json",
+        "/usr/local/bin/node"
+      ],
+      "verdict": "clean"
+    }
+  },
+  "install_stderr_tail": "h where you\nleft off. Downloads and seeds keep running while detached.\n\nserve mode (no TUI): a small HTTP API for handing torlink a magnet.\n  POST /add {\"magnet\":\"...\"}   queue a magnet or info hash\n  GET  /downloads              list active downloads and seeds\n  GET  /health                 liveness (no auth)\nflags: --port <n> (default 9161), --host <addr> (default 127.0.0.1),\n--token <secret> (required to bind a public --host; or TORLINK_API_TOKEN),\n--to <dir> (where files land).\n\nfiles mode (no TUI): a read-only, range-aware HTTP server over the downloads\nfolder, so finished files stream to a browser or media player.\n  GET /            list the folder (JSON)\n  GET /<path>      stream a file (supports Range for seeking/resuming)\nflags: --port <n> (default 9160), --host <addr> (default 127.0.0.1),\n--token <secret> (required to bind a public --host; or TORLINK_FILES_TOKEN),\n--dir <dir> (folder to serve; defaults to your downloads folder).\n\nlogs: /root/.local/share/torlink/torlink.log\n\n",
+  "install_stdout_tail": "\nadded 226 packages in 5m\n"
+}
