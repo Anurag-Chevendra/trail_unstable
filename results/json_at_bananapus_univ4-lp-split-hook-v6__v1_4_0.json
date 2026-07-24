@@ -1,0 +1,394 @@
+{
+  "package": "@bananapus/univ4-lp-split-hook-v6",
+  "registry_version": "1.4.0",
+  "analyzed_at": "2026-07-24T06:41:07.915614+00:00",
+  "status": "timeout",
+  "install_returncode": 124,
+  "install_timed_out": true,
+  "package_dir_found": false,
+  "overall_verdict": "REVIEW",
+  "verdict_by_phase": {
+    "install": "REVIEW",
+    "import": "INCONCLUSIVE"
+  },
+  "harness_status": {
+    "package_dir_found": false,
+    "imported": false,
+    "import_error": "Cannot find package '@bananapus/univ4-lp-split-hook-v6' imported from /test/myfile.js",
+    "strategies": [],
+    "candidates": 0,
+    "files_loaded": 0,
+    "load_errors": [],
+    "bins_found": 0,
+    "bins": [],
+    "entry_points": 0,
+    "entries_called": 0,
+    "handlers_registered": 0,
+    "handlers_fired": 0,
+    "errors": [],
+    "no_entry_point": false
+  },
+  "import_phase_executed": false,
+  "no_js_entry": false,
+  "import_phase_reason": "install_incomplete: package dir absent",
+  "bin_entries": [],
+  "analysis_complete": false,
+  "network": {
+    "attribution": "unattributed_fallback",
+    "package_connections": [],
+    "all_public_connections": [
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "19",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "20.207.73.88",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "10",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.9.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.1.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.7.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.6.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.5.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.8.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.0.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.2.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.4.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.10.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.11.34",
+        "port": 0,
+        "result": "0",
+        "blocked": false,
+        "pid": "32",
+        "from_package": false
+      },
+      {
+        "ip": "104.16.3.34",
+        "port": 443,
+        "result": "-1 EINPROGRESS",
+        "blocked": false,
+        "pid": "22",
+        "from_package": false
+      }
+    ],
+    "dns_lookups_all": [
+      "codeload.github.com",
+      "registry.npmjs.org"
+    ],
+    "dns_lookups_non_npm": [
+      "codeload.github.com"
+    ],
+    "npm_hostnames_seen": [
+      "registry.npmjs.org"
+    ],
+    "exfil_services_contacted": [],
+    "verdict": "review"
+  },
+  "canaries": {
+    "attribution": "unattributed",
+    "canary_tokens_leaked": [],
+    "canary_token_count": 0,
+    "sensitive_file_access": [
+      {
+        "path": "/test/.npmrc",
+        "found": false,
+        "error": "ENOENT",
+        "read_by": "unknown",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npmrc",
+        "found": true,
+        "error": null,
+        "read_by": "unknown",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npm/_cacache/tmp/git-cloneE0oZL7/.env.example",
+        "found": true,
+        "error": null,
+        "read_by": "unknown",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npm/_cacache/tmp/git-cloneEj39LW/l1-contracts/.env",
+        "found": true,
+        "error": null,
+        "read_by": "unknown",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npm/_cacache/tmp/git-cloneEj39LW/l2-contracts/.env",
+        "found": true,
+        "error": null,
+        "read_by": "unknown",
+        "benign_npm_read": true
+      },
+      {
+        "path": "/root/.npm/_cacache/tmp/git-cloneEj39LW/.npmrc",
+        "found": false,
+        "error": "ENOENT",
+        "read_by": "unknown",
+        "benign_npm_read": true
+      }
+    ],
+    "accessed_by_package": [],
+    "probed_but_absent": [],
+    "verdict": "clean"
+  },
+  "filesystem": {
+    "attribution": "unattributed",
+    "package_files_read": [],
+    "package_files_written": [],
+    "package_dirs_created": [],
+    "tmp_snooped": [],
+    "recon_dir_scan": false,
+    "recon_dirs_enumerated": [],
+    "downloaded_artifacts": [],
+    "executed_by_package": [],
+    "all_reads": [
+      "/etc/gai.conf",
+      "/etc/host.conf",
+      "/etc/hosts",
+      "/etc/ld.so.cache",
+      "/etc/localtime",
+      "/etc/nsswitch.conf",
+      "/etc/resolv.conf",
+      "/root/.gitconfig",
+      "/root/.npmrc",
+      "/test/package.json",
+      "/usr/local/bin/node"
+    ],
+    "verdict": "clean"
+  },
+  "import_phase": {
+    "verdict": "CLEAN",
+    "network": {
+      "attribution": "pid_subtree",
+      "package_connections": [],
+      "all_public_connections": [],
+      "dns_lookups_all": [],
+      "dns_lookups_non_npm": [],
+      "npm_hostnames_seen": [],
+      "exfil_services_contacted": [],
+      "verdict": "clean"
+    },
+    "canaries": {
+      "attribution": "pid_subtree",
+      "canary_tokens_leaked": [],
+      "canary_token_count": 0,
+      "sensitive_file_access": [],
+      "accessed_by_package": [],
+      "probed_but_absent": [],
+      "verdict": "clean"
+    },
+    "filesystem": {
+      "attribution": "pid_subtree",
+      "package_files_read": [
+        "/etc/ld.so.cache",
+        "/test/myfile.js",
+        "/test/package.json",
+        "/usr/local/bin/node"
+      ],
+      "package_files_written": [],
+      "package_dirs_created": [],
+      "tmp_snooped": [],
+      "recon_dir_scan": false,
+      "recon_dirs_enumerated": [],
+      "downloaded_artifacts": [],
+      "executed_by_package": [],
+      "all_reads": [
+        "/etc/ld.so.cache",
+        "/test/myfile.js",
+        "/test/package.json",
+        "/usr/local/bin/node"
+      ],
+      "verdict": "clean"
+    }
+  },
+  "install_stderr_tail": "[harness] bare import failed: Cannot find package '@bananapus/univ4-lp-split-hook-v6' imported from /test/myfile.js\n[harness] package dir not found under node_modules\n[harness] STATUS {\"package_dir_found\":false,\"imported\":false,\"import_error\":\"Cannot find package '@bananapus/univ4-lp-split-hook-v6' imported from /test/myfile.js\",\"strategies\":[],\"candidates\":0,\"files_loaded\":0,\"load_errors\":[],\"bins_found\":0,\"bins\":[],\"entry_points\":0,\"entries_called\":0,\"handlers_registered\":0,\"handlers_fired\":0,\"errors\":[],\"no_entry_point\":false}\n",
+  "install_stdout_tail": ""
+}
