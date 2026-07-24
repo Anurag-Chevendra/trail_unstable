@@ -1,107 +1,86 @@
 [
   {
-    "package": "@copilot-mcp/apex",
+    "package": "domain-rank",
+    "verdict": "CLEAN",
+    "file": "results/json_domain-rank__v0_1_90.json",
+    "published_at": null,
+    "finished_at": 1784897634.4975324
+  },
+  {
+    "package": "fi-agent",
+    "verdict": "REVIEW",
+    "file": "results/json_fi-agent__v0_81_1.json",
+    "published_at": null,
+    "finished_at": 1784897681.4630897
+  },
+  {
+    "package": "hanncap",
+    "verdict": "REVIEW",
+    "file": "results/json_hanncap__v1_0_2.json",
+    "published_at": null,
+    "finished_at": 1784897844.6922448
+  },
+  {
+    "package": "@apexfnd/apex",
     "verdict": "NOT_FOUND",
-    "file": "results/json_at_copilot-mcp_apex.json",
+    "file": "results/json_at_apexfnd_apex.json",
     "published_at": null,
-    "finished_at": 1784897510.666653
+    "finished_at": 1784897845.5406578
   },
   {
-    "package": "galliun",
+    "package": "@handy_wote/pi-agent-core",
+    "verdict": "CLEAN",
+    "file": "results/json_at_handy_wote_pi-agent-core__v0_83_0.json",
+    "published_at": null,
+    "finished_at": 1784897969.1914878
+  },
+  {
+    "package": "@strikeblitz/icons-react",
+    "verdict": "NOT_FOUND",
+    "file": "results/json_at_strikeblitz_icons-react.json",
+    "published_at": null,
+    "finished_at": 1784897970.4435234
+  },
+  {
+    "package": "@prisma-lossless/client",
+    "verdict": "CLEAN",
+    "file": "results/json_at_prisma-lossless_client__v7_8_0-lossless_16.json",
+    "published_at": null,
+    "finished_at": 1784898076.3254926
+  },
+  {
+    "package": "@guard0/g0",
+    "verdict": "CLEAN",
+    "file": "results/json_at_guard0_g0__v2_1_0.json",
+    "published_at": null,
+    "finished_at": 1784898308.7291453
+  },
+  {
+    "package": "@levery/passkey",
     "verdict": "INCONCLUSIVE",
-    "file": "results/json_galliun__v0_2_1.json",
+    "file": "results/json_at_levery_passkey__v0_1_2.json",
     "published_at": null,
-    "finished_at": 1784897634.9183002
+    "finished_at": 1784898389.842983
   },
   {
-    "package": "@opencode-ai/util",
+    "package": "@earendil-works/pi-storage-sqlite-node",
     "verdict": "CLEAN",
-    "file": "results/json_at_opencode-ai_util__v0_0_0-bootstrap_0.json",
+    "file": "results/json_at_earendil-works_pi-storage-sqlite-node__v0_82_0.json",
     "published_at": null,
-    "finished_at": 1784897658.4064043
+    "finished_at": 1784898801.5094244
   },
   {
-    "package": "@handy_wote/pi-ai",
-    "verdict": "CLEAN",
-    "file": "results/json_at_handy_wote_pi-ai__v0_83_0.json",
+    "package": "scope-bouncer",
+    "verdict": "REVIEW",
+    "file": "results/json_scope-bouncer__v4_3_3.json",
     "published_at": null,
-    "finished_at": 1784897666.9131994
+    "finished_at": 1784898849.1156282
   },
   {
-    "package": "@pikku/addon-postbin",
+    "package": "cosystem",
     "verdict": "NO_JS_ENTRY",
-    "file": "results/json_at_pikku_addon-postbin__v0_0_2.json",
+    "file": "results/json_cosystem__v0_0_1.json",
     "published_at": null,
-    "finished_at": 1784897695.414494
-  },
-  {
-    "package": "becki",
-    "verdict": "REVIEW",
-    "file": "results/json_becki__v0_5_1.json",
-    "published_at": null,
-    "finished_at": 1784897933.1201885
-  },
-  {
-    "package": "@4djs/ai-widgets",
-    "verdict": "NO_JS_ENTRY",
-    "file": "results/json_at_4djs_ai-widgets__v0_1_1.json",
-    "published_at": null,
-    "finished_at": 1784897963.9504492
-  },
-  {
-    "package": "blockly-ps",
-    "verdict": "CLEAN",
-    "file": "results/json_blockly-ps__v13_1_1-3.json",
-    "published_at": null,
-    "finished_at": 1784898148.289445
-  },
-  {
-    "package": "ai-tether",
-    "verdict": "REVIEW",
-    "file": "results/json_ai-tether__v0_2_0.json",
-    "published_at": null,
-    "finished_at": 1784898343.4132476
-  },
-  {
-    "package": "@wopr-network/better-prompts",
-    "verdict": "REVIEW",
-    "file": "results/json_at_wopr-network_better-prompts__v0_1_1.json",
-    "published_at": null,
-    "finished_at": 1784898512.7531996
-  },
-  {
-    "package": "@shengmingboai/db-mcp",
-    "verdict": "CLEAN",
-    "file": "results/json_at_shengmingboai_db-mcp__v1_0_0.json",
-    "published_at": null,
-    "finished_at": 1784898602.175937
-  },
-  {
-    "package": "@orcado/yoyui",
-    "verdict": "CLEAN",
-    "file": "results/json_at_orcado_yoyui__v0_0_6.json",
-    "published_at": null,
-    "finished_at": 1784898787.7019994
-  },
-  {
-    "package": "digivix",
-    "verdict": "REVIEW",
-    "file": "results/json_digivix__v1_0_16.json",
-    "published_at": null,
-    "finished_at": 1784898788.415206
-  },
-  {
-    "package": "@w3kits/plugin-librechat",
-    "verdict": "CLEAN",
-    "file": "results/json_at_w3kits_plugin-librechat__v0_1_5.json",
-    "published_at": null,
-    "finished_at": 1784898833.4330022
-  },
-  {
-    "package": "@realpkuasule/openapi-engineering-skill",
-    "verdict": "CLEAN",
-    "file": "results/json_at_realpkuasule_openapi-engineering-skill__v0_1_3.json",
-    "published_at": null,
-    "finished_at": 1784898879.2482135
+    "finished_at": 1784898899.4402614
   }
 ]
