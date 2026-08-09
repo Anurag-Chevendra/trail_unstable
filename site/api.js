@@ -11,7 +11,9 @@
 
 // Set this to your deployed Worker. Leaving it empty makes the page fall back
 // to its built-in fixtures, so the design stays editable with no backend.
-const API = "";   // e.g. "https://trail-api.yourname.workers.dev"
+const API = "https://trail-api.traildata.workers.dev";   // "" = use built-in fixtures
+
+export const API_BASE = API;
 
 const j = (r) => {
   if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);

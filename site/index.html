@@ -141,6 +141,7 @@ code,.mono{font-family:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace}
 .b .c{font-size:12.5px;font-weight:500;color:var(--faint);
   font-variant-numeric:tabular-nums;transition:color .16s}
 .b.threat .c{color:var(--alert);opacity:.8}
+.b .c.zero{color:var(--faint);opacity:.55}
 .b[aria-pressed=true] .c{color:var(--dim);opacity:1}
 .split{display:grid;grid-template-columns:250px 1fr;gap:16px;align-items:start;margin-top:20px}
 .rail{background:var(--panel);border-radius:14px;padding:8px 8px 10px}
@@ -265,7 +266,8 @@ code,.mono{font-family:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace}
 </div></div>
 <div class="wrap" id="app"></div>
 
-<script>
+<script type="module">
+import { API_BASE, listRecent, getPackage } from "./api.js";
 /* Every field below is copied from the merged reports. Nothing is paraphrased:
    `message` is the scanner's own text, labels mirror the JSON keys. */
 const P=[
@@ -513,7 +515,7 @@ const P=[
 
 const FILL=["@shadcn/helpers","axios-test-one","scaffold-agent","@zapier/dropbox-connector",
 "@droyd/cli","git-span-win32-x64","bvm-core","ts-pattern-lite","@vercel/edge-shim","fast-glob-x"];
-const ALL=P.concat(Array.from({length:130},(_,i)=>({
+const FIXTURES=P.concat(Array.from({length:130},(_,i)=>({
   name:FILL[i%FILL.length]+(i>9?"-"+i:""),version:"1."+(i%9)+"."+(i%5),
   verdict:i%12===0?"REVIEW":"CLEAN",versions:["1.0.0"],
   files:[{p:"index.js",b:900+i*13,e:+((4.6+(i%14)/20)/8).toFixed(3),h:(i+"").padStart(64,"0")},
@@ -525,6 +527,10 @@ const ALL=P.concat(Array.from({length:130},(_,i)=>({
     tmp_snooped:[],downloaded_artifacts:[],recon_dirs_enumerated:[],recon_dir_scan:false},
   threats:[],caps:[]})));
 
+// ALL is filled from the API on boot. The fixtures stay as a fallback so the
+// page still renders for design work with no backend, and so a Worker outage
+// degrades to a stale-but-working page instead of a blank one.
+let ALL=[], usingFixtures=false;
 const LIMIT=100;let view="landing",filter="ALL",q="",cur=0;
 const app=document.getElementById("app");
 document.getElementById("upd").textContent="updated "+new Date()
@@ -652,7 +658,10 @@ function families(list){
   return Object.values(out).sort((a,b)=>b.n-a.n);
 }
 
-let sel=null;
+// `open` tracks which rule families are expanded. It must be declared: an
+// undeclared `open` silently resolves to window.open in a browser, so the
+// expansion state ends up as properties on a global function.
+let sel=null, open={};
 function staticBar(p){
   const T=families(p.threats).map(g=>({...g,kind:"threat"}));
   const C=families(p.caps).map(g=>({...g,kind:"cap"}));
@@ -667,12 +676,12 @@ function staticBar(p){
   // families and the rules inside them -- lives in the rail, so the bar stays
   // one line no matter how many rules a package trips.
   const bar=`<div class="bar">
-    ${(T.length||C.length)?`<button class="b" data-k="all" aria-pressed="${sel.kind==="all"}">All
-      <span class="c">${p.threats.length+p.caps.length}</span></button>`:""}
-    ${T.length?`<button class="b threat" data-k="threat" aria-pressed="${sel.kind==="threat"}">
-      Threats<span class="c">${p.threats.length}</span></button>`:""}
-    ${C.length?`<button class="b" data-k="cap" aria-pressed="${sel.kind==="cap"}">
-      Capabilities<span class="c">${p.caps.length}</span></button>`:""}
+    <button class="b" data-k="all" aria-pressed="${sel.kind==="all"}">All
+      <span class="c${(p.threats.length+p.caps.length)?"":" zero"}">${p.threats.length+p.caps.length}</span></button>
+    <button class="b threat" data-k="threat" aria-pressed="${sel.kind==="threat"}">
+      Threats<span class="c${p.threats.length?"":" zero"}">${p.threats.length}</span></button>
+    <button class="b" data-k="cap" aria-pressed="${sel.kind==="cap"}">
+      Capabilities<span class="c${p.caps.length?"":" zero"}">${p.caps.length}</span></button>
     ${(p.files||[]).length?`<button class="b" data-k="entropy"
       aria-pressed="${sel.kind==="entropy"}">Entropy
       <span class="c">${p.files.length}</span></button>`:""}
@@ -697,10 +706,13 @@ function staticBar(p){
       </div>`).join("")}</div>`;
   }
 
-  if(!T.length&&!C.length)return `${bar}<div class="stack solo" style="padding:20px 22px">
-    <div class="none">No threats or capabilities recorded.</div></div>`;
-
   const groups=sel.kind==="threat"?T:sel.kind==="cap"?C:[...T,...C];
+  if(!groups.length){
+    const what=sel.kind==="threat"?"threats":sel.kind==="cap"?"capabilities"
+              :"threats or capabilities";
+    return `${bar}<div class="stack solo" style="padding:20px 22px">
+      <div class="none">No ${what} recorded.</div></div>`;
+  }
   if(sel.key&&!groups.some(g=>g.key===sel.key)){sel.key=null;sel.rule=null;}
   const active=sel.key?groups.find(g=>g.key===sel.key):null;
 
@@ -739,11 +751,52 @@ function staticBar(p){
 }
 
 function render(){
-  app.innerHTML=view==="landing"?landing():detail(ALL[cur]);
+  const p=ALL[cur];
+  app.innerHTML = view==="landing" ? landing()
+    : (p && p.threats) ? detail(p) : loading(p);
   const qi=document.getElementById("q");
   if(qi)qi.oninput=e=>{q=e.target.value.toLowerCase();render();
     const n=document.getElementById("q");n.focus();n.setSelectionRange(n.value.length,n.value.length);};
 }
+/* Cards carry only the summary row from /api/recent; the report itself is
+   fetched when a package is opened, so the landing page stays one request. */
+function loading(p){
+  return `<a class="back" href="#" data-back>All packages</a>
+    <div class="phead"><h1 class="ptitle">${esc((p&&p.name)||"")}</h1></div>
+    <div class="none" style="padding:26px 0">Loading…</div>`;
+}
+
+async function openPackage(i){
+  cur=i; view="detail"; sel=null; open={};
+  const p=ALL[i];
+  render(); scrollTo(0,0);
+  if(p.threats) return;                       // already fetched
+  try{
+    ALL[i]={...p, ...await getPackage(p.name,p.version)};
+  }catch(err){
+    ALL[i]={...p, threats:[], caps:[], files:[], loadError:String(err.message||err),
+      net:{package_connections:[],dns_lookups_non_npm:[],exfil_services_contacted:[]},
+      cred:{canary_tokens_leaked:[],accessed_by_package:[],probed_but_absent:[],
+            sensitive_file_access:[]},
+      fs:{package_files_read:[],package_files_written:[],executed_by_package:[],
+          dropped_and_executed:[],tmp_snooped:[],downloaded_artifacts:[],
+          recon_dirs_enumerated:[],recon_dir_scan:false}};
+  }
+  render();
+}
+
+async function boot(){
+  if(API_BASE){
+    try{
+      ALL=await listRecent(LIMIT);
+    }catch(err){
+      console.warn("API unreachable, using fixtures:",err);
+      ALL=FIXTURES; usingFixtures=true;
+    }
+  } else { ALL=FIXTURES; usingFixtures=true; }
+  render();
+}
+
 document.getElementById("theme").onclick=()=>{const r=document.documentElement;
   r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
 document.addEventListener("click",e=>{
@@ -753,7 +806,11 @@ document.addEventListener("click",e=>{
     if(b!==db)b.setAttribute("aria-expanded","false");});
   if(db){db.setAttribute("aria-expanded",db.getAttribute("aria-expanded")!=="true");return;}
   const di=t.closest("[data-ver]");
-  if(di){const y=scrollY;ALL[cur].version=di.dataset.ver;render();scrollTo(0,y);return;}
+  if(di){const v=di.dataset.ver,p=ALL[cur];
+    if(v!==p.version){ALL[cur]={name:p.name,version:v,verdict:p.verdict,
+      versions:p.versions,bytes:p.bytes,sha:p.sha,ago:p.ago};
+      openPackage(cur);}
+    return;}
   const kb=t.closest("[data-k]");
   if(kb){const y=scrollY;sel={kind:kb.dataset.k,key:null,rule:null};open={};
     render();scrollTo(0,y);return;}
@@ -771,13 +828,13 @@ document.addEventListener("click",e=>{
   if(bh){bh.setAttribute("aria-expanded",bh.getAttribute("aria-expanded")!=="true");return;}
   const f=t.closest("[data-f]");if(f){filter=f.dataset.f;render();return;}
   const o=t.closest("[data-open]");
-  if(o){e.preventDefault();cur=+o.dataset.open;view="detail";sel=null;render();scrollTo(0,0);return;}
+  if(o){e.preventDefault();openPackage(+o.dataset.open);return;}
   if(t.closest("[data-back]")){e.preventDefault();view="landing";render();scrollTo(0,0);return;}
   if(t.closest("[data-copy]")){navigator.clipboard?.writeText(
     document.getElementById("sha").textContent);
     t.textContent="Copied";setTimeout(()=>t.textContent="Copy",1400);}
 });
-render();
+boot();
 </script>
 </body>
 </html>
