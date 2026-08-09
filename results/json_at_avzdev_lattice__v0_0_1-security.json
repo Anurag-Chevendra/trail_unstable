@@ -1,8 +1,0 @@
-{
-  "package": "@avzdev/lattice",
-  "status": "security_holding",
-  "overall_verdict": "SECURITY_HOLDING",
-  "analysis_complete": false,
-  "error": "security holding package",
-  "registry_version": "0.0.1-security"
-}

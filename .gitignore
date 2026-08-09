@@ -1,0 +1,34 @@
+# ── NEVER COMMIT: live malware ───────────────────────────────────────
+# artifacts/ holds the actual tarballs Trail downloaded from npm. Some of
+# them are real malware. Pushing these to a public repo redistributes it,
+# and will get the repo flagged and taken down.
+artifacts/
+*.tgz
+
+# ── NEVER COMMIT: captured secrets ───────────────────────────────────
+# Traces record syscall arguments from inside the sandbox, including the
+# planted canary tokens and the contents of /root/.npmrc.
+results/
+trace_*.log
+
+# ── NEVER COMMIT: credentials ────────────────────────────────────────
+.env
+*.env
+trail.env
+!.env.example
+
+# ── local state ──────────────────────────────────────────────────────
+queue.db
+*.db
+*.db-shm
+*.db-wal
+
+# ── python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+.venv-guarddog/
+
+# ── node / wrangler ──────────────────────────────────────────────────
+node_modules/
+.wrangler/
