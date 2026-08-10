@@ -692,19 +692,26 @@ function staticBar(p){
     // `e` is normalised entropy: Shannon entropy over the 256 byte values
     // divided by 8, so the scale is 0-1. Compressed, encrypted or packed data
     // sits near 1; source and text sit around 0.5-0.65.
-    const files=[...(p.files||[])].sort((a,b)=>b.e-a.e);
+    const files=[...(p.files||[])].sort((a,b)=>
+      (typeof b.e==="number") - (typeof a.e==="number") || (b.e||0)-(a.e||0));
     return `${bar}<div class="stack solo">
       <div class="fhead"><span class="s1">File</span>
         <span class="s2">Entropy</span></div>
-      ${files.map(f=>`<div class="frow ${f.e>=0.94?"fhi":""}">
+      ${files.map(f=>{
+        // Files above ENTROPY_MAX_FILE_BYTES are hashed but not measured, so
+        // `e` is null. Show the row with an empty bar rather than dropping it:
+        // the hash and size are still worth having.
+        const measured = typeof f.e === "number";
+        return `<div class="frow ${measured&&f.e>=0.94?"fhi":""}">
         <div class="ftop"><span class="fpath">${esc(f.p)}</span>
           <span class="fscale"><span>0</span>
-            <span class="fbar" tabindex="0"><i style="width:${(f.e*100).toFixed(1)}%"></i>
-              <span class="tip">${f.e.toFixed(3)}</span></span>
+            <span class="fbar" tabindex="0"><i style="width:${
+              measured?(f.e*100).toFixed(1):0}%"></i>
+              <span class="tip">${measured?f.e.toFixed(3):"not measured"}</span></span>
             <span>1</span></span></div>
         <div class="fmeta"><span class="fsize">${kb(f.b)}</span>
           <span class="fhash">${esc(f.h)}</span></div>
-      </div>`).join("")}</div>`;
+      </div>`;}).join("")}</div>`;
   }
 
   const groups=sel.kind==="threat"?T:sel.kind==="cap"?C:[...T,...C];
@@ -722,11 +729,11 @@ function staticBar(p){
     const kids=Object.keys(g.rules),multi=kids.length>1;
     const isOpen=sel.key===g.key&&open[g.key]!==false;
     const suffix=r=>r===g.key?r:r.slice(g.key.length+1);
-    return `<button class="b2" data-g="${g.key}" aria-pressed="${sel.key===g.key&&!sel.rule}">
+    return `<button class="b2" data-g="${esc(g.key)}" aria-pressed="${sel.key===g.key&&!sel.rule}">
       ${multi?`<span class="rcar ${isOpen?"":"closed"}"></span>`:`<span class="rgap"></span>`}
       <span class="n">${esc(pretty(g.key))}</span><span class="c">${g.n}</span></button>
       ${multi&&isOpen?`<div class="rkids">${kids.map(r=>`<button class="b3"
-        data-g="${g.key}" data-r="${esc(r)}" aria-pressed="${sel.rule===r}">
+        data-g="${esc(g.key)}" data-r="${esc(r)}" aria-pressed="${sel.rule===r}">
         <span class="n">${esc(pretty(suffix(r)))}</span>
         <span class="c">${g.rules[r].length}</span></button>`).join("")}</div>`:""}`;
   };
@@ -786,6 +793,16 @@ async function openPackage(i){
   render();
 }
 
+/* Ask the server for the filtered slice rather than narrowing what we already
+   hold, so "Review" reaches every flagged package, not just the recent ones. */
+async function refilter(){
+  if(!API_BASE||usingFixtures){ render(); return; }
+  try{
+    ALL = await listRecent(LIMIT, filter==="ALL" ? null : filter);
+  }catch(err){ console.warn("filter fetch failed:", err); }
+  render();
+}
+
 async function boot(){
   if(API_BASE){
     try{
@@ -827,7 +844,8 @@ document.addEventListener("click",e=>{
     render();scrollTo(0,y);return;}
   const bh=t.closest(".blockhead");
   if(bh){bh.setAttribute("aria-expanded",bh.getAttribute("aria-expanded")!=="true");return;}
-  const f=t.closest("[data-f]");if(f){filter=f.dataset.f;render();return;}
+  const f=t.closest("[data-f]");
+  if(f){filter=f.dataset.f; refilter(); return;}
   const o=t.closest("[data-open]");
   if(o){e.preventDefault();openPackage(+o.dataset.open);return;}
   if(t.closest("[data-back]")){e.preventDefault();view="landing";render();scrollTo(0,0);return;}
