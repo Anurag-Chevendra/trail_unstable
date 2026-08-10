@@ -20,9 +20,17 @@ const j = (r) => {
   return r.json();
 };
 
-/** Newest analyses for the landing grid. */
-export async function listRecent(limit = 100) {
-  const rows = await fetch(`${API}/api/recent?limit=${limit}`).then(j);
+/**
+ * Newest analyses for the landing grid.
+ *
+ * `verdict` filters SERVER-SIDE. Without it, filtering happens inside the
+ * newest-100 window, so a REVIEW from two hundred packages ago is invisible --
+ * the count on the page then disagrees with `trail.py --status` and there is
+ * no way to reach the older ones.
+ */
+export async function listRecent(limit = 100, verdict = null) {
+  const q = verdict ? `&verdict=${encodeURIComponent(verdict)}` : "";
+  const rows = await fetch(`${API}/api/recent?limit=${limit}${q}`).then(j);
   return rows.map((r) => ({
     name: r.name,
     version: r.version,
