@@ -544,9 +544,13 @@ const pretty=s=>{const t=String(s).replace(/[-_]/g," ");
   return t.charAt(0).toUpperCase()+t.slice(1);};
 
 function landing(){
-  const pool=ALL.slice(0,LIMIT);
-  const rows=pool.filter(p=>(filter==="ALL"||p.verdict===filter)&&
-    (!q||p.name.toLowerCase().includes(q)||p.version.includes(q)));
+  // ALL already holds the server's answer for the current filter and query,
+  // so no further narrowing here -- doing both would silently re-limit the
+  // results to whatever happened to be in the last fetch.
+  const rows=usingFixtures
+    ? ALL.slice(0,LIMIT).filter(p=>(filter==="ALL"||p.verdict===filter)&&
+        (!q||p.name.toLowerCase().includes(q)||p.version.includes(q)))
+    : ALL;
   return `<div class="controls">
     <input class="search" id="q" placeholder="Search package name or version…" value="${esc(q)}">
     <div class="seg">${["ALL","REVIEW","CLEAN"].map(f=>
@@ -763,8 +767,7 @@ function render(){
   app.innerHTML = view==="landing" ? landing()
     : (p && p.threats) ? detail(p) : loading(p);
   const qi=document.getElementById("q");
-  if(qi)qi.oninput=e=>{q=e.target.value.toLowerCase();render();
-    const n=document.getElementById("q");n.focus();n.setSelectionRange(n.value.length,n.value.length);};
+  if(qi)qi.oninput=e=>{q=e.target.value.trim(); searchChanged();};
 }
 /* Cards carry only the summary row from /api/recent; the report itself is
    fetched when a package is opened, so the landing page stays one request. */
@@ -798,9 +801,26 @@ async function openPackage(i){
 async function refilter(){
   if(!API_BASE||usingFixtures){ render(); return; }
   try{
-    ALL = await listRecent(LIMIT, filter==="ALL" ? null : filter);
+    ALL = await listRecent(LIMIT, filter==="ALL" ? null : filter, q || null);
   }catch(err){ console.warn("filter fetch failed:", err); }
   render();
+}
+
+// Typing shouldn't fire a request per keystroke, and a slow response for an
+// earlier prefix must not overwrite a later one -- hence the sequence guard.
+let searchTimer=null, searchSeq=0;
+function searchChanged(){
+  clearTimeout(searchTimer);
+  const mine=++searchSeq;
+  searchTimer=setTimeout(async ()=>{
+    if(!API_BASE||usingFixtures){ render(); return; }
+    try{
+      const rows=await listRecent(LIMIT, filter==="ALL"?null:filter, q||null);
+      if(mine!==searchSeq) return;          // a newer query already went out
+      ALL=rows;
+    }catch(err){ console.warn("search failed:", err); }
+    render();
+  }, 250);
 }
 
 async function boot(){
