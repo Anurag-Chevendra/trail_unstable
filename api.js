@@ -28,9 +28,11 @@ const j = (r) => {
  * the count on the page then disagrees with `trail.py --status` and there is
  * no way to reach the older ones.
  */
-export async function listRecent(limit = 100, verdict = null) {
-  const q = verdict ? `&verdict=${encodeURIComponent(verdict)}` : "";
-  const rows = await fetch(`${API}/api/recent?limit=${limit}${q}`).then(j);
+export async function listRecent(limit = 100, verdict = null, query = null) {
+  const p = new URLSearchParams({ limit });
+  if (verdict) p.set("verdict", verdict);
+  if (query) p.set("q", query);
+  const rows = await fetch(`${API}/api/recent?${p}`).then(j);
   return rows.map((r) => ({
     name: r.name,
     version: r.version,
