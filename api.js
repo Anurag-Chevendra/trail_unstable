@@ -97,30 +97,37 @@ export function mapReport(report, versions) {
     noEntry: dyn.no_js_entry === true,
 
     net: {
-      package_connections: both("network", "package_connections")
-        .map((c) => (typeof c === "string" ? c : `${c.ip}:${c.port}`)),
-      dns_lookups_non_npm: both("network", "dns_lookups_non_npm"),
-      exfil_services_contacted: both("network", "exfil_services_contacted"),
+      package_connections: strings(both("network", "package_connections")),
+      dns_lookups_non_npm: strings(both("network", "dns_lookups_non_npm")),
+      exfil_services_contacted: strings(both("network", "exfil_services_contacted")),
     },
     cred: {
-      canary_tokens_leaked: both("canaries", "canary_tokens_leaked"),
-      accessed_by_package: both("canaries", "accessed_by_package"),
-      probed_but_absent: both("canaries", "probed_but_absent"),
-      sensitive_file_access: [
-        ...new Set([...((dyn.canaries || {}).sensitive_file_access || []),
-                    ...((imp.canaries || {}).sensitive_file_access || [])]
-          .map((a) => (typeof a === "string" ? a : a.path))),
-      ],
+      canary_tokens_leaked: strings(both("canaries", "canary_tokens_leaked")),
+      accessed_by_package: strings(both("canaries", "accessed_by_package")),
+      probed_but_absent: strings(both("canaries", "probed_but_absent")),
+      sensitive_file_access: strings([
+        ...((dyn.canaries || {}).sensitive_file_access || []),
+        ...((imp.canaries || {}).sensitive_file_access || [])]),
     },
     fs: {
-      package_files_read: both("filesystem", "package_files_read"),
-      package_files_written: both("filesystem", "package_files_written"),
-      downloaded_artifacts: both("filesystem", "downloaded_artifacts"),
-      tmp_snooped: both("filesystem", "tmp_snooped"),
-      recon_dirs_enumerated: both("filesystem", "recon_dirs_enumerated"),
+      package_files_read: strings(both("filesystem", "package_files_read")),
+      package_files_written: strings(both("filesystem", "package_files_written")),
+      // Records, not strings: {path, pid, likely_source, executed}. Flatten to
+      // the path, and mark the ones that were then run -- a downloaded file
+      // that is also executed is a materially different fact from one that
+      // just sits on disk.
+      downloaded_artifacts: [
+        ...new Set([...((dyn.filesystem || {}).downloaded_artifacts || []),
+                    ...((imp.filesystem || {}).downloaded_artifacts || [])]
+          .map((a) => (typeof a === "string" ? a
+                       : a.executed ? `${a.path}  (executed)` : a.path))
+          .filter(Boolean)),
+      ],
+      tmp_snooped: strings(both("filesystem", "tmp_snooped")),
+      recon_dirs_enumerated: strings(both("filesystem", "recon_dirs_enumerated")),
       recon_dir_scan: !!((dyn.filesystem || {}).recon_dir_scan ||
                          (imp.filesystem || {}).recon_dir_scan),
-      dropped_and_executed: both("filesystem", "dropped_and_executed"),
+      dropped_and_executed: strings(both("filesystem", "dropped_and_executed")),
       // executed_by_package holds objects; the chmod-only entries have no
       // `bin` and are already represented by dropped_and_executed.
       executed_by_package: [
@@ -146,6 +153,26 @@ export function mapReport(report, versions) {
       p: f.p, b: f.b, e: f.e, h: f.h,
     })),
   };
+}
+
+/**
+ * Coerce a list to displayable strings.
+ *
+ * The parsers return plain strings for most fields but records for a few
+ * (executed_by_package, downloaded_artifacts), and a record reaching a pill
+ * renders as "[object Object]" -- which looks like a bug to anyone reading a
+ * report and hides the value entirely. Applied to every rendered list so a
+ * future parser change can't reintroduce that.
+ */
+function strings(list) {
+  return [...new Set((list || []).map((x) => {
+    if (typeof x === "string") return x;
+    if (x && typeof x === "object")
+      return x.path || x.bin || x.made_executable || x.token ||
+             (x.ip ? `${x.ip}:${x.port ?? ""}`.replace(/:$/, "") : null) ||
+             JSON.stringify(x);
+    return x == null ? null : String(x);
+  }).filter(Boolean))];
 }
 
 /** "4 hours ago" from an epoch-seconds timestamp or an ISO string. */
