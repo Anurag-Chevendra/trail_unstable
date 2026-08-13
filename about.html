@@ -71,6 +71,9 @@ code{font-family:'Geist Mono',monospace;font-size:.88em;background:var(--neutbg)
 .card h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
 .card p{font-size:14px;margin:0;color:var(--dim)}
 .card p + p{margin-top:10px}
+.cards.one{grid-template-columns:1fr}
+/* version strings read wrong shouted in caps */
+.card .k.ver{text-transform:none;font-family:'Geist Mono',monospace;letter-spacing:0}
 @media(max-width:660px){.cards{grid-template-columns:1fr}}
 
 /* a panel that mirrors the package page */
@@ -322,16 +325,21 @@ footer a:hover{color:var(--text)}
     <h2>Sandbox</h2>
     <p>
       A sandbox is table stakes. The open problem is detection strategy, worked on
-      a branch:
+      across two branches in parallel.
     </p>
-    <div class="cards">
+    <div class="cards one">
       <div class="card">
-        <div class="k">sb-v1.3</div>
+        <div class="k ver">sb-v1.3</div>
         <h3>Evasion resistance</h3>
         <p>Sandbox realism, against payloads that go quiet the moment they sense they are being watched.</p>
       </div>
-    <p>Latest stable release of the sandbox is used for this feed currently. We plan to, eventually, also be able to run heuristics on the dropped binaries and make them available for download. They will come in the subsequent version of this sandbox</p>
     </div>
+    <p style="margin-top:16px">
+      Latest stable release of the sandbox is used for this feed currently. We plan
+      to, eventually, also be able to run heuristics on the dropped binaries and
+      make them available for download. They will come in the subsequent version of
+      this sandbox.
+    </p>
   </section>
 
   <section>
