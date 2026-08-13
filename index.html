@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Analytics (GA4). Replace G-DV4Q1GRB1T with your Measurement ID. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DV4Q1GRB1T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  // send_page_view:false because this is a single page app. GA would otherwise
+  // record one hit on load and nothing afterwards, so every package a visitor
+  // opens would be invisible. Page views are sent manually on navigation.
+  gtag('config', 'G-DV4Q1GRB1T', { send_page_view: false });
+</script>
 <title>Trail</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -540,6 +551,16 @@ const FIXTURES=P.concat(Array.from({length:130},(_,i)=>({
 // degrades to a stale-but-working page instead of a blank one.
 let ALL=[], usingFixtures=false;
 const LIMIT=100;let view="landing",filter="ALL",q="",cur=0;
+
+/* Analytics. A no-op when gtag is absent, which covers ad blockers and any
+   local file:// testing, so nothing here can break the page. Paths are
+   synthetic: the URL never actually changes in this app, but GA needs a path
+   to group by and /p/<name>/<version> is what a real route would have been. */
+function track(path, title){
+  if (typeof gtag !== "function") return;
+  gtag("event", "page_view", { page_path: path, page_title: title,
+    page_location: location.origin + path });
+}
 const app=document.getElementById("app");
 document.getElementById("upd").textContent="updated "+new Date()
   .toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
@@ -815,6 +836,9 @@ function loading(p){
 async function openPackage(i){
   cur=i; view="detail"; sel=null; open={};
   const p=ALL[i];
+  // Sent before the report is fetched, so a slow or failed fetch still counts
+  // as the visitor having opened that package.
+  track(`/p/${p.name}/${p.version}`, `${p.name}@${p.version}`);
   render(); scrollTo(0,0);
   if(p.threats) return;                       // already fetched
   try{
@@ -852,6 +876,10 @@ function searchChanged(){
     try{
       const rows=await listRecent(LIMIT, filter==="ALL"?null:filter, q||null);
       if(mine!==searchSeq) return;          // a newer query already went out
+      // Fires once per settled query, not per keystroke, since it sits inside
+      // the debounce. What people search for is the useful signal here.
+      if(q && typeof gtag==="function")
+        gtag("event","search",{search_term:q, results:rows.length});
       ALL=rows;
     }catch(err){ console.warn("search failed:", err); }
     render();
@@ -867,6 +895,7 @@ async function boot(){
       ALL=FIXTURES; usingFixtures=true;
     }
   } else { ALL=FIXTURES; usingFixtures=true; }
+  track("/", "Trail feed");
   render();
 }
 
@@ -903,7 +932,8 @@ document.addEventListener("click",e=>{
   if(f){filter=f.dataset.f; refilter(); return;}
   const o=t.closest("[data-open]");
   if(o){e.preventDefault();openPackage(+o.dataset.open);return;}
-  if(t.closest("[data-back]")){e.preventDefault();view="landing";render();scrollTo(0,0);return;}
+  if(t.closest("[data-back]")){e.preventDefault();view="landing";
+    track("/", "Trail feed"); render();scrollTo(0,0);return;}
   if(t.closest("[data-copy]")){navigator.clipboard?.writeText(
     document.getElementById("sha").textContent);
     t.textContent="Copied";setTimeout(()=>t.textContent="Copy",1400);}
