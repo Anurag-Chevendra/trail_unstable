@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trail · about</title>
+<meta name="description" content="Trail installs npm packages in a disposable sandbox and records what they actually do: every file, connection and process, attributed to the code that caused it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root[data-theme="dark"]{
+  --bg:#0A0C10;--panel:#11141A;--raised:#161A21;--line:#202630;
+  --text:#EDF0F4;--dim:#98A2B0;--faint:#69727F;
+  --clean:#3FCF8E;--cleanbg:rgba(63,207,142,.09);--cleanbd:rgba(63,207,142,.28);
+  --alert:#FF6B6B;--alertbg:rgba(255,107,107,.09);--alertbd:rgba(255,107,107,.30);
+  --neutbg:#171C24;--neutbd:#262D38;
+}
+:root[data-theme="light"]{
+  --bg:#FCFCFD;--panel:#FFFFFF;--raised:#F5F6F8;--line:#E5E8ED;
+  --text:#11141A;--dim:#5C6675;--faint:#8A94A2;
+  --clean:#0E9F63;--cleanbg:rgba(14,159,99,.08);--cleanbd:rgba(14,159,99,.25);
+  --alert:#D33B45;--alertbg:rgba(211,59,69,.07);--alertbd:rgba(211,59,69,.24);
+  --neutbg:#F3F4F7;--neutbd:#E0E4EA;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;
+  font-family:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* top bar, same as the feed */
+.top{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;gap:16px}
+.brand{font-family:'Geist Mono',monospace;font-weight:600;font-size:20px;letter-spacing:-.03em}
+.brand em{font-style:normal;color:var(--clean)}
+.crumb{font-size:13px;color:var(--faint)}
+.spacer{flex:1}
+.iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--dim)}
+.iconbtn:hover{color:var(--text);border-color:var(--neutbd)}
+
+.wrap{max-width:760px;margin:0 auto;padding:44px 28px 120px}
+
+h1{font-size:31px;font-weight:600;letter-spacing:-.03em;margin:0 0 10px;line-height:1.25}
+.lede{font-size:17px;color:var(--dim);max-width:56ch;margin-bottom:6px}
+.lede b{color:var(--text);font-weight:500}
+
+section{margin-top:46px}
+h2{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:0 0 14px}
+p{margin-bottom:14px;color:var(--dim);max-width:66ch}
+p.strong{color:var(--text)}
+code{font-family:'Geist Mono',monospace;font-size:.88em;background:var(--neutbg);
+  border:1px solid var(--neutbd);border-radius:6px;padding:1px 6px;color:var(--text)}
+
+/* verdict pill, same as the feed */
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;
+  letter-spacing:.05em;padding:6px 13px;border-radius:8px;border:1px solid}
+.pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.clean{color:var(--clean);background:var(--cleanbg);border-color:var(--cleanbd)}
+.pill.review{color:var(--alert);background:var(--alertbg);border-color:var(--alertbd)}
+.pill.flat{color:var(--dim);background:var(--neutbg);border-color:var(--neutbd)}
+.pill.flat::before{display:none}
+
+/* engine cards */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.card .k{font-size:12px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:10px}
+.card h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+.card p{font-size:14px;margin:0;color:var(--dim)}
+.card p + p{margin-top:10px}
+@media(max-width:660px){.cards{grid-template-columns:1fr}}
+
+/* a panel that mirrors the package page */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:8px 22px 18px;margin-top:16px}
+.phead{display:flex;align-items:center;gap:12px;padding:15px 0 12px;flex-wrap:wrap}
+.pname{font-family:'Geist Mono',monospace;font-size:15px;font-weight:500;letter-spacing:-.02em}
+.pmeta{font-size:13px;color:var(--faint)}
+.r{display:flex;gap:20px;padding:9px 0;align-items:flex-start}
+.rl{width:172px;flex:none;color:var(--dim);font-size:14px;padding-top:3px}
+.rv{flex:1;display:flex;flex-wrap:wrap;gap:7px}
+.t{font-family:'Geist Mono',monospace;font-size:12.5px;padding:4px 10px;border-radius:7px;
+  background:var(--neutbg);border:1px solid var(--neutbd);color:var(--dim);
+  word-break:break-all;line-height:1.45}
+.t.hot{background:var(--alertbg);border-color:var(--alertbd);color:var(--alert)}
+.t.nil{color:var(--faint);opacity:.75}
+@media(max-width:600px){.r{flex-direction:column;gap:6px}.rl{width:100%;padding-top:0}}
+
+/* numbered flow */
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:0 0 20px 42px;
+  border-left:1px solid var(--line);margin-left:13px}
+.steps li:last-child{padding-bottom:0;border-left-color:transparent}
+.steps li::before{content:counter(s);position:absolute;left:-13px;top:0;
+  width:26px;height:26px;border-radius:50%;background:var(--panel);
+  border:1px solid var(--line);font-family:'Geist Mono',monospace;font-size:12px;
+  color:var(--faint);display:flex;align-items:center;justify-content:center}
+.steps b{display:block;font-weight:600;margin-bottom:2px;font-size:15px}
+.steps span{color:var(--dim);font-size:14px}
+
+/* signal chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13px;padding:6px 12px;border-radius:8px;background:var(--neutbg);
+  border:1px solid var(--neutbd);color:var(--dim)}
+.chip.hot{background:var(--alertbg);border-color:var(--alertbd);color:var(--alert)}
+
+/* verdict rows */
+.verdicts{display:grid;gap:12px}
+.vrow{display:flex;gap:16px;align-items:baseline;background:var(--panel);
+  border:1px solid var(--line);border-radius:12px;padding:15px 18px}
+.vrow p{margin:0;font-size:14px}
+.vrow .pill{flex:none;min-width:104px;justify-content:center}
+
+.mail{font-family:'Geist Mono',monospace;font-size:16px;color:var(--text);
+  border-bottom:1px solid var(--line);padding-bottom:2px}
+.mail:hover{border-bottom-color:var(--text)}
+
+footer{max-width:760px;margin:0 auto;padding:26px 28px 60px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:13px;color:var(--faint)}
+footer a:hover{color:var(--text)}
+@media(max-width:520px){h1{font-size:25px}.wrap{padding:32px 18px 90px}.top-in{padding:16px 18px}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <a href="index.html" class="brand">trail<em>.</em></a>
+  <span class="crumb">about</span>
+  <span class="spacer"></span>
+  <button class="iconbtn" id="theme" aria-label="Switch theme">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="4.5"/>
+      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>
+    </svg>
+  </button>
+</div></div>
+
+<div class="wrap">
+
+  <h1>What the code actually did</h1>
+  <p class="lede">
+    Trail installs npm packages in a disposable sandbox and records every file
+    they touch, every process they start and every connection they open, then
+    attributes each action to the code that caused it.
+  </p>
+
+  <section>
+    <h2>What this is</h2>
+    <p class="strong">
+      Each package on the feed is installed inside a fresh, throwaway container.
+      The install runs with scripts enabled while the system calls it makes are
+      recorded. The package is then loaded the way a consumer would load it, and
+      recorded again.
+    </p>
+    <p>
+      Every recorded action is tied back to the process that produced it, so the
+      package's own behaviour is separated from the ordinary noise of an
+      <code>npm install</code>. npm reads your <code>.npmrc</code> on every
+      install; that is npm doing its job, not a finding.
+    </p>
+    <p>
+      Trail is a triage tool rather than a classifier. Its job is to surface
+      behaviour worth a human's attention, not to pass final judgment.
+    </p>
+  </section>
+
+  <section>
+    <h2>Two engines</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="k">Dynamic</div>
+        <h3>Behaviour in a sandbox</h3>
+        <p>
+          The package is installed and imported inside an isolated container while
+          its system calls are traced. Files read and written, processes spawned,
+          permissions changed, sockets opened.
+        </p>
+        <p>
+          Events are correlated as well as counted. A file made executable and then
+          run, or a secret read and then compressed into an archive named after it,
+          means something that neither event means alone.
+        </p>
+        <p>This engine sets the verdict.</p>
+      </div>
+      <div class="card">
+        <div class="k">Static</div>
+        <h3>Contents of the tarball</h3>
+        <p>
+          The published archive is examined without being run. Rule matches against
+          the source, the capabilities the code holds, and the package metadata as
+          the registry reports it.
+        </p>
+        <p>
+          Every file also gets a SHA&#8239;256 and an entropy score, which reveals
+          packed, compressed or encrypted content sitting inside an otherwise
+          readable package.
+        </p>
+        <p>This engine adds context to a verdict it does not set.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What a finding looks like</h2>
+    <p>
+      <code>polymarket-stake-mathss@3.5.2</code> is two kilobytes of readable
+      JavaScript with one <code>postinstall</code> hook. This is what the sandbox
+      watched it do.
+    </p>
+    <div class="panel">
+      <div class="phead">
+        <span class="pname">polymarket-stake-mathss</span>
+        <span class="pmeta">v3.5.2 · 2 KB</span>
+        <span class="spacer"></span>
+        <span class="pill review">REVIEW</span>
+      </div>
+      <div class="r">
+        <div class="rl">Accessed by package</div>
+        <div class="rv">
+          <span class="t hot">/root/.ssh/id_rsa</span>
+          <span class="t hot">/root/.aws/credentials</span>
+          <span class="t hot">/root/.config/gh/hosts.yml</span>
+          <span class="t hot">/root/.docker/config.json</span>
+          <span class="t hot">/root/.electrum/wallets/default_wallet</span>
+          <span class="t nil">and others</span>
+        </div>
+      </div>
+      <div class="r">
+        <div class="rl">Archives written</div>
+        <div class="rv">
+          <span class="t hot">…/credentials&#8239;ssh&#8239;ssh.gz</span>
+          <span class="t hot">…/credentials&#8239;aws&#8239;aws.gz</span>
+          <span class="t hot">…/credentials&#8239;gh&#8239;token.gz</span>
+          <span class="t nil">and others</span>
+        </div>
+      </div>
+      <div class="r">
+        <div class="rl">Executed by package</div>
+        <div class="rv"><span class="t hot">/usr/bin/tar</span><span class="t hot">/usr/bin/gzip</span></div>
+      </div>
+      <div class="r">
+        <div class="rl">Package connections</div>
+        <div class="rv"><span class="t hot">216.198.79.1:443</span><span class="t hot">64.29.17.1:443</span></div>
+      </div>
+    </div>
+    <p style="margin-top:20px">
+      It opened credential file after credential file, compressed each one into a
+      temporary directory, named every archive after whatever it had just taken,
+      then opened outbound connections. The whole sequence took ten and a half
+      seconds.
+    </p>
+    <p>
+      Read those rows one at a time and each is unremarkable. Packages read files.
+      Build tools run <code>gzip</code>. Installers write to temporary directories.
+      What makes this a finding is the order the actions happened in, which is
+      visible only while the code is running.
+    </p>
+    <p class="strong">
+      Nothing was taken. The container holds nothing real and is destroyed moments
+      later, so what the package collected was a set of files that exist nowhere
+      else.
+    </p>
+  </section>
+
+  <section>
+    <h2>How a package moves through it</h2>
+    <ol class="steps">
+      <li><b>Fresh sandbox</b><span>Every package starts from an identical, pristine container image. Nothing persists between runs.</span></li>
+      <li><b>Instrumented install</b><span>The install runs with scripts enabled under full system call tracing, isolated from anything real.</span></li>
+      <li><b>Import</b><span>The package is then loaded as a consumer would load it and traced separately, so payloads that wait for import do not get a free pass.</span></li>
+      <li><b>Attribution</b><span>Each action is tied to the process tree that produced it: package code, npm itself, or build tooling.</span></li>
+      <li><b>Correlation</b><span>Events that mean little apart are joined into findings that mean something together.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>What gets flagged</h2>
+    <div class="chips">
+      <span class="chip hot">credentials read, then archived</span>
+      <span class="chip hot">payloads dropped and executed</span>
+      <span class="chip hot">connections outside the registry</span>
+      <span class="chip hot">known exfiltration services</span>
+      <span class="chip">filesystem reconnaissance</span>
+      <span class="chip">temporary file snooping</span>
+      <span class="chip">files written outside the project</span>
+      <span class="chip">high entropy files</span>
+    </div>
+    <p style="margin-top:18px">
+      The feed has already surfaced live threats, among them dependency confusion
+      probes beaconing to out of band callback services, and a package encoding
+      host details inside DNS queries.
+    </p>
+  </section>
+
+  <section>
+    <h2>Reading the feed</h2>
+    <div class="verdicts">
+      <div class="vrow"><span class="pill review">REVIEW</span>
+        <p>Behaviour a human should look at. A lead, not a conviction.</p></div>
+      <div class="vrow"><span class="pill clean">CLEAN</span>
+        <p>Nothing notable observed. Behaviour outside the observation window is out of scope.</p></div>
+    </div>
+    <p style="margin-top:18px">
+      Two verdicts, deliberately. A third tier invites arguments about which shade
+      something is instead of whether to look at it. Where a run was cut short, the
+      result is REVIEW, because no coverage is not the same as nothing found.
+    </p>
+    <p>
+      If the registry pulls a package while it is being analysed, it drops off the
+      feed entirely. Security holdings are the exception: npm replaces the real
+      version with a <code>0.0.1-security</code> placeholder, so there is nothing
+      left to install and nothing to observe. Those stay, filed under review and
+      marked as placeholders.
+    </p>
+  </section>
+
+  <section>
+    <h2>Engine</h2>
+    <p>
+      A sandbox is table stakes. The open problem is detection strategy, worked on
+      across two branches in parallel.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <div class="k">Beta · feeds this page</div>
+        <h3>Evasion resistance</h3>
+        <p>Sandbox realism, against payloads that go quiet the moment they sense they are being watched.</p>
+      </div>
+      <div class="card">
+        <div class="k">Alpha · in development</div>
+        <h3>Code coverage</h3>
+        <p>Execution paths that an install and an import alone never reach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>A disputed verdict, a package worth a look, or just to talk. Cheers.</p>
+    <a class="mail" href="mailto:contact@snappyfeet.org">contact@snappyfeet.org</a>
+  </section>
+
+</div>
+
+<footer>
+  <span>Trail · behavioural package analysis</span>
+  <a href="index.html">Back to the feed</a>
+</footer>
+
+<script>
+  const r=document.documentElement;
+  document.getElementById("theme").onclick=()=>{
+    r.dataset.theme = r.dataset.theme==="dark" ? "light" : "dark";
+  };
+</script>
+</body>
+</html>
