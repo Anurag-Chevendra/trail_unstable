@@ -39,6 +39,13 @@ code,.mono{font-family:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace}
 .iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
   display:grid;place-items:center;color:var(--dim)}
 .iconbtn:hover{color:var(--text);border-color:var(--neutbd)}
+/* Same height and border as the theme toggle so the two read as one control
+   group rather than a button with a stray link next to it. */
+.navlink{display:inline-flex;align-items:center;height:34px;padding:0 14px;
+  border-radius:9px;border:1px solid var(--line);color:var(--dim);
+  font-size:14px;transition:color .15s,border-color .15s}
+.navlink:hover{color:var(--text);border-color:var(--neutbd)}
+@media(max-width:420px){.navlink{padding:0 11px;font-size:13px}}
 .wrap{max-width:1040px;margin:0 auto;padding:36px 28px 120px}
 
 /* verdict */
@@ -260,6 +267,7 @@ code,.mono{font-family:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace}
 <div class="top"><div class="top-in">
   <a href="#" data-back class="brand">trail<em>.</em></a>
   <span class="updated" id="upd"></span><span class="spacer"></span>
+  <a class="navlink" href="about.html">About</a>
   <button class="iconbtn" id="theme"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/>
     <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg></button>
@@ -564,9 +572,35 @@ function landing(){
 }
 
 /* label + pill row. `hot` marks values that are themselves the concern. */
+/**
+ * Shorten a path for display. The full value stays in the title attribute, so
+ * nothing is lost -- but a row of 55-character strings is unreadable, and most
+ * of that length carries no information: /tmp/ is where all of these live, and
+ * the 13-digit epoch suffix a stager appends is a uniquifier, not a fact
+ * anyone reads. What identifies the file is the middle.
+ */
+function shortPath(x){
+  let s=String(x);
+  // keep any annotation we appended, e.g. "  (built from aws)"
+  const note=s.match(/\s{2}\(.*\)$/); if(note) s=s.slice(0,note.index);
+  // Applied unconditionally, not only to long values: a column where some
+  // rows are stripped and others aren't reads as inconsistent rather than
+  // tidy, and the dropped parts carry no information either way.
+  let out=s.replace(/-\d{10,}(?=\.|$)/,"")            // epoch-ms uniquifier
+           .replace(/^\/(tmp|var\/tmp|root|home\/[^/]+)\//,"…/");
+  if(out.length>44){                                  // still long: keep the tail
+    const parts=out.split("/");
+    if(parts.length>2) out="…/"+parts.slice(-2).join("/");
+  }
+  if(out.length>44) out=out.slice(0,18)+"…"+out.slice(-24);
+  return note?out+note[0]:out;
+}
+
 function row(label,vals,hot){
   const v=vals.length
-    ? vals.map(x=>`<span class="t ${hot?"hot":""}">${esc(x)}</span>`).join("")
+    ? vals.map(x=>{const sh=shortPath(x);
+        return `<span class="t ${hot?"hot":""}"${sh!==String(x)?` title="${esc(x)}"`:""}>${esc(sh)}</span>`;
+      }).join("")
     : `<span class="t nil">none</span>`;
   return `<div class="r"><div class="rl">${label}</div><div class="rv">${v}</div></div>`;
 }
@@ -628,7 +662,8 @@ function detail(p){
       row("Dropped and executed",f.dropped_and_executed.map(short),true)+
       row("Executed by package",f.executed_by_package.map(short),f.dropped_and_executed.length>0)+
       row("Package files written",f.package_files_written,true)+
-      row("Downloaded artifacts",f.downloaded_artifacts,true)+
+      row("Exfil staging",f.exfil_staging||[],true)+
+      row("Archives written",f.archives_written||f.downloaded_artifacts||[],true)+
       row("Tmp snooped",f.tmp_snooped,true)+
       row("Recon dirs enumerated",f.recon_dirs_enumerated,true)+
       row("Package files read",f.package_files_read))}
