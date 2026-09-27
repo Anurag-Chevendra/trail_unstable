@@ -286,7 +286,7 @@ code,.mono{font-family:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace}
 <div class="wrap" id="app"></div>
 
 <script type="module">
-import { API_BASE, listRecent, getPackage } from "./api.js";
+import { API_BASE, listRecent, getPackage, listVersions } from "./api.js";
 /* Every field below is copied from the merged reports. Nothing is paraphrased:
    `message` is the scanner's own text, labels mirror the JSON keys. */
 const P=[
@@ -552,6 +552,44 @@ const FIXTURES=P.concat(Array.from({length:130},(_,i)=>({
 let ALL=[], usingFixtures=false;
 const LIMIT=100;let view="landing",filter="ALL",q="",cur=0;
 
+/* Shareable URLs. GitHub Pages serves this same index.html for any query
+   string, so the page's state lives in the query:
+     ?p=is-odd@3.0.1            one analysis
+     ?p=is-odd                  that package's most recent analysis
+     ?p=@scope/name@1.2.3       scoped names work as written
+     ?q=terria&filter=review    a search, optionally narrowed by verdict
+   The address bar follows every click, so copying it always shares exactly
+   what is on screen, and the browser's back button works. */
+let landingStale=false;       // ALL holds a deep-linked package, not the list
+function splitSpec(s){        // "@scope/name@1.2.3" -> ["@scope/name","1.2.3"]
+  const at=s.lastIndexOf("@");
+  return at>0 ? [s.slice(0,at), s.slice(at+1)] : [s, ""];
+}
+// Keep @ and / readable in shared links; everything else is escaped.
+const enc=s=>encodeURIComponent(s).replace(/%40/g,"@").replace(/%2F/gi,"/");
+function urlFor(st){
+  const parts=[];
+  if(st.p) parts.push("p="+enc(st.p));
+  else{
+    if(st.q) parts.push("q="+enc(st.q));
+    if(st.filter&&st.filter!=="ALL") parts.push("filter="+st.filter.toLowerCase());
+  }
+  return location.pathname+(parts.length?"?"+parts.join("&"):"");
+}
+const specOf=p=>`${p.name}@${p.version}`;
+function syncUrl(push){
+  const p=ALL[cur];
+  const url=view==="detail"&&p ? urlFor({p:specOf(p)}) : urlFor({q, filter});
+  if(url===location.pathname+location.search) return;
+  history[push?"pushState":"replaceState"](null,"",url);
+}
+function readUrl(){
+  const s=new URLSearchParams(location.search);
+  const f=(s.get("filter")||"").toUpperCase();
+  return {p:(s.get("p")||"").trim(), q:(s.get("q")||"").trim(),
+          filter:["REVIEW","CLEAN"].includes(f)?f:"ALL"};
+}
+
 /* Analytics. A no-op when gtag is absent, which covers ad blockers and any
    local file:// testing, so nothing here can break the page. Paths are
    synthetic: the URL never actually changes in this app, but GA needs a path
@@ -585,7 +623,7 @@ function landing(){
     <div class="seg">${["ALL","REVIEW","CLEAN"].map(f=>
       `<button data-f="${f}" aria-pressed="${filter===f}">${f[0]+f.slice(1).toLowerCase()}</button>`).join("")}</div>
   </div>
-  <div class="grid">${rows.map(p=>`<a class="card" href="#" data-open="${ALL.indexOf(p)}">
+  <div class="grid">${rows.map(p=>`<a class="card" href="${esc(urlFor({p:specOf(p)}))}" data-open="${ALL.indexOf(p)}">
     <div class="card-top">
       <div><div class="pname">${esc(p.name)}</div><div class="pver">v${esc(p.version)}</div></div>
       <span class="pill ${p.verdict.toLowerCase()}">${p.verdict}</span></div>
@@ -663,7 +701,8 @@ function detail(p){
           stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
         <span class="vnum">v${esc(v)}</span></button>`).join("")}</div>
     </div>
-    <span class="pill lg ${p.verdict.toLowerCase()}">${p.verdict}</span></div>
+    <span class="pill lg ${p.verdict.toLowerCase()}">${p.verdict}</span>
+    <button class="copy" data-share title="Copy a link to this analysis">Copy link</button></div>
   <div class="pfacts"><span>npm</span><span><b>${kb(p.bytes)}</b></span>
     <span>Analysed <b>${p.ago}</b></span></div>
   <div class="shabar"><span class="shalab">SHA-256</span>
@@ -820,22 +859,40 @@ function staticBar(p){
 
 function render(){
   const p=ALL[cur];
-  app.innerHTML = view==="landing" ? landing()
-    : (p && p.threats) ? detail(p) : loading(p);
+  app.innerHTML = view==="landing" || !p ? landing()
+    : p.loadError ? notFound(p)
+    : p.threats ? detail(p) : loading(p);
+  document.title = view==="detail" && p ? `${specOf(p)} · Trail` : "Trail";
   const qi=document.getElementById("q");
   if(qi)qi.oninput=e=>{q=e.target.value.trim(); searchChanged();};
 }
 /* Cards carry only the summary row from /api/recent; the report itself is
    fetched when a package is opened, so the landing page stays one request. */
+/* A shared link to something Trail has not analysed must say so. Rendering
+   the empty report instead would show "none" everywhere, which reads as a
+   clean result. */
+function notFound(p){
+  return `<a class="back" href="#" data-back>All packages</a>
+    <div class="phead"><h1 class="ptitle">${esc(p.name||"")}</h1></div>
+    <div class="notice">${esc(p.loadError)}</div>`;
+}
+function loadMessage(p, err){
+  const m=String((err&&err.message)||err||"");
+  return m.startsWith("404")
+    ? `Trail has not analysed ${p.version?specOf(p):p.name} yet.`
+    : `Could not load this report (${m}). Try again in a moment.`;
+}
+
 function loading(p){
   return `<a class="back" href="#" data-back>All packages</a>
     <div class="phead"><h1 class="ptitle">${esc((p&&p.name)||"")}</h1></div>
     <div class="none" style="padding:26px 0">Loading…</div>`;
 }
 
-async function openPackage(i){
+async function openPackage(i, push=true){
   cur=i; view="detail"; sel=null; open={};
   const p=ALL[i];
+  syncUrl(push);
   // Sent before the report is fetched, so a slow or failed fetch still counts
   // as the visitor having opened that package.
   track(`/p/${p.name}/${p.version}`, `${p.name}@${p.version}`);
@@ -844,7 +901,7 @@ async function openPackage(i){
   try{
     ALL[i]={...p, ...await getPackage(p.name,p.version)};
   }catch(err){
-    ALL[i]={...p, threats:[], caps:[], files:[], loadError:String(err.message||err),
+    ALL[i]={...p, threats:[], caps:[], files:[], loadError:loadMessage(p, err),
       net:{package_connections:[],dns_lookups_non_npm:[],exfil_services_contacted:[]},
       cred:{canary_tokens_leaked:[],accessed_by_package:[],probed_but_absent:[],
             sensitive_file_access:[]},
@@ -869,6 +926,7 @@ async function refilter(){
 // earlier prefix must not overwrite a later one -- hence the sequence guard.
 let searchTimer=null, searchSeq=0;
 function searchChanged(){
+  syncUrl(false);
   clearTimeout(searchTimer);
   const mine=++searchSeq;
   searchTimer=setTimeout(async ()=>{
@@ -886,18 +944,55 @@ function searchChanged(){
   }, 250);
 }
 
+/* Open ?p=name[@version] without going through the list: the package may
+   be far older than the newest hundred. With no version, the most recent
+   analysis of that name is shown. */
+async function openFromUrl(spec){
+  let [name, version]=splitSpec(spec);
+  const hit=ALL.findIndex(p=>p.name===name&&(!version||p.version===version));
+  if(hit>=0){ openPackage(hit,false); return; }
+  if(usingFixtures){
+    ALL=[{name, version, loadError:`Trail has not analysed ${spec} yet.`}];
+    cur=0; view="detail"; landingStale=true; render(); return;
+  }
+  if(!version){
+    try{ version=(await listVersions(name))[0]||""; }
+    catch(err){
+      ALL=[{name, version:"", loadError:loadMessage({name}, err)}];
+      cur=0; view="detail"; landingStale=true; render(); return;
+    }
+  }
+  ALL=[{name, version, verdict:"", versions:[version], bytes:0, sha:"", ago:""}];
+  landingStale=true;
+  await openPackage(0,false);
+}
+
 async function boot(){
-  if(API_BASE){
+  const u=readUrl(); q=u.q; filter=u.filter;
+  if(!API_BASE){ ALL=FIXTURES; usingFixtures=true; }
+  if(u.p && !usingFixtures){ await openFromUrl(u.p); return; }
+  if(!usingFixtures){
     try{
-      ALL=await listRecent(LIMIT);
+      ALL=await listRecent(LIMIT, filter==="ALL"?null:filter, q||null);
     }catch(err){
       console.warn("API unreachable, using fixtures:",err);
       ALL=FIXTURES; usingFixtures=true;
     }
-  } else { ALL=FIXTURES; usingFixtures=true; }
+  }
+  if(u.p){ await openFromUrl(u.p); return; }
   track("/", "Trail feed");
   render();
 }
+
+// Back and forward buttons: the URL is the state, so re-read it.
+addEventListener("popstate", async ()=>{
+  const u=readUrl();
+  if(u.p){ await openFromUrl(u.p); return; }
+  const same=q===u.q&&filter===u.filter;
+  view="landing"; q=u.q; filter=u.filter;
+  if(landingStale||!same){ landingStale=false; await refilter(); }
+  else render();
+});
 
 document.getElementById("theme").onclick=()=>{const r=document.documentElement;
   r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};
@@ -911,7 +1006,7 @@ document.addEventListener("click",e=>{
   if(di){const v=di.dataset.ver,p=ALL[cur];
     if(v!==p.version){ALL[cur]={name:p.name,version:v,verdict:p.verdict,
       versions:p.versions,bytes:p.bytes,sha:p.sha,ago:p.ago};
-      openPackage(cur);}
+      openPackage(cur,false);}
     return;}
   const kb=t.closest("[data-k]");
   if(kb){const y=scrollY;sel={kind:kb.dataset.k,key:null,rule:null};open={};
@@ -929,11 +1024,24 @@ document.addEventListener("click",e=>{
   const bh=t.closest(".blockhead");
   if(bh){bh.setAttribute("aria-expanded",bh.getAttribute("aria-expanded")!=="true");return;}
   const f=t.closest("[data-f]");
-  if(f){filter=f.dataset.f; refilter(); return;}
+  if(f){filter=f.dataset.f; syncUrl(false); refilter(); return;}
   const o=t.closest("[data-open]");
-  if(o){e.preventDefault();openPackage(+o.dataset.open);return;}
+  if(o){
+    // Ctrl/Cmd/Shift-click: let the browser open the card's real link.
+    if(e.ctrlKey||e.metaKey||e.shiftKey) return;
+    e.preventDefault();openPackage(+o.dataset.open);return;}
   if(t.closest("[data-back]")){e.preventDefault();view="landing";
-    track("/", "Trail feed"); render();scrollTo(0,0);return;}
+    syncUrl(true); track("/", "Trail feed");
+    // Arrived by a shared link: ALL holds that one package, not the list.
+    if(landingStale){ landingStale=false; refilter(); } else render();
+    scrollTo(0,0);return;}
+  const sh=t.closest("[data-share]");
+  if(sh){
+    const link=location.origin+urlFor({p:specOf(ALL[cur])});
+    const done=()=>{sh.textContent="Copied";setTimeout(()=>sh.textContent="Copy link",1400);};
+    if(navigator.clipboard) navigator.clipboard.writeText(link).then(done,()=>prompt("Copy this link:",link));
+    else prompt("Copy this link:",link);
+    return;}
   if(t.closest("[data-copy]")){navigator.clipboard?.writeText(
     document.getElementById("sha").textContent);
     t.textContent="Copied";setTimeout(()=>t.textContent="Copy",1400);}
